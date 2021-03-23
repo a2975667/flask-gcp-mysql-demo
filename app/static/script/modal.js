@@ -2,11 +2,11 @@ $(document).ready(function () {
     // example: https://getbootstrap.com/docs/4.2/components/modal/
     // show modal
     $('#task-modal').on('show.bs.modal', function (event) {
-        let button = $(event.relatedTarget) // Button that triggered the modal
-        let taskID = button.data('source') // Extract info from data-* attributes
-        let content = button.data('content') // Extract info from data-* attributes
+        const button = $(event.relatedTarget) // Button that triggered the modal
+        const taskID = button.data('source') // Extract info from data-* attributes
+        const content = button.data('content') // Extract info from data-* attributes
 
-        let modal = $(this)
+        const modal = $(this)
         if (taskID === 'New Task') {
             modal.find('.modal-title').text(taskID)
             $('#task-form-display').removeAttr('taskID')
@@ -24,7 +24,7 @@ $(document).ready(function () {
 
 
     $('#submit-task').click(function () {
-        let tID = $('#task-form-display').attr('taskID');
+        const tID = $('#task-form-display').attr('taskID');
         console.log($('#task-modal').find('.form-control').val())
         $.ajax({
             type: 'POST',
@@ -44,7 +44,7 @@ $(document).ready(function () {
     });
 
     $('.remove').click(function () {
-        let remove = $(this)
+        const remove = $(this)
         $.ajax({
             type: 'POST',
             url: '/delete/' + remove.data('source'),
@@ -59,9 +59,9 @@ $(document).ready(function () {
     });
 
     $('.state').click(function () {
-        let state = $(this)
-        let tID = state.data('source')
-        let new_state
+        const state = $(this)
+        const tID = state.data('source')
+        const new_state
         if (state.text() === "In Progress") {
             new_state = "Complete"
         } else if (state.text() === "Complete") {
