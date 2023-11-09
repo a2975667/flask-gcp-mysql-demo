@@ -1,5 +1,5 @@
 # A Todo List demo App
-Spinoff of todolist application available at  https://github.com/a2975667/. 
+Spinoff of todolist application available at https://github.com/a2975667/flask-gcp-mysql-demo. 
 
 ## Requirements
 
@@ -33,6 +33,6 @@ mysql -uroot -ppassw0rd --host=localhost < init.sql
 python -m venv .venv
 source .venv/bin/activate
 pip install -r requirements.txt
-export FLASK_APP = app
-flask run
+source env.sh
+python main.py
 ```
