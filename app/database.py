@@ -8,18 +8,17 @@ def fetch_todo() -> dict:
         A list of dictionaries
     """
 
-    conn = db.connect()
-    query_results = conn.execute("Select * from tasks;").fetchall()
-    conn.close()
+    cursor = db.cursor()
+    cursor.execute("SELECT * FROM tasks;")
     todo_list = []
-    for result in query_results:
+    for result in cursor:
         item = {
             "id": result[0],
             "task": result[1],
             "status": result[2]
         }
         todo_list.append(item)
-
+    cursor.close()
     return todo_list
 
 
@@ -34,10 +33,11 @@ def update_task_entry(task_id: int, text: str) -> None:
         None
     """
 
-    conn = db.connect()
-    query = 'Update tasks set task = "{}" where id = {};'.format(text, task_id)
-    conn.execute(query)
-    conn.close()
+    cursor = db.cursor()
+    query = 'UPDATE tasks SET task = "{}" WHERE id = {};'.format(text, task_id)
+    cursor.execute(query)
+    db.commit()
+    cursor.close()
 
 
 def update_status_entry(task_id: int, text: str) -> None:
@@ -51,10 +51,11 @@ def update_status_entry(task_id: int, text: str) -> None:
         None
     """
 
-    conn = db.connect()
-    query = 'Update tasks set status = "{}" where id = {};'.format(text, task_id)
-    conn.execute(query)
-    conn.close()
+    cursor = db.cursor()
+    query = 'UPDATE tasks SET status = "{}" WHERE id = {};'.format(text, task_id)
+    cursor.execute(query)
+    db.commit()
+    cursor.close()
 
 
 def insert_new_task(text: str) ->  int:
@@ -66,21 +67,22 @@ def insert_new_task(text: str) ->  int:
     Returns: The task ID for the inserted entry
     """
 
-    conn = db.connect()
-    query = 'Insert Into tasks (task, status) VALUES ("{}", "{}");'.format(
-        text, "Todo")
-    conn.execute(query)
-    query_results = conn.execute("Select LAST_INSERT_ID();")
-    query_results = [x for x in query_results]
+    cursor = db.cursor()
+    query = 'INSERT INTO tasks (task, status) VALUES ("{}", "{}");'.format(text, "Todo")
+    cursor.execute(query)
+    cursor.execute("SELECT LAST_INSERT_ID();")
+    query_results = [x for x in cursor]
     task_id = query_results[0][0]
-    conn.close()
+    db.commit()
+    cursor.close()
 
     return task_id
 
 
 def remove_task_by_id(task_id: int) -> None:
     """ remove entries based on task ID """
-    conn = db.connect()
-    query = 'Delete From tasks where id={};'.format(task_id)
-    conn.execute(query)
-    conn.close()
+    cursor = db.cursor()
+    query = 'DELETE FROM tasks WHERE id={};'.format(task_id)
+    cursor.execute(query)
+    db.commit()
+    cursor.close()
