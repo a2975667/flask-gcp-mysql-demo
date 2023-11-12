@@ -63,7 +63,7 @@
         <tr>
             <th class="task-id">#</th>
             <th class="task">Task Name</th>
-            <th class="status">Status</th>
+            <!-- <th class="status">Status</th> -->
             <th class="update">Edit</th>
             <th class="update">Remove</th>
         </tr>
@@ -75,7 +75,7 @@
                 <td>{{item.id}}</td>
                 <td>{{item.task}}</td>
 
-                {% if item.status == "In Progress" %}
+                <!-- {% if item.status == "In Progress" %}
                     <td><button type="button" class="btn btn-outline-warning btn-sm state" data-source="{{item.id}}">{{item.status}}</button></td>
                 {%endif%}
                 {% if item.status == "Todo" %}
@@ -83,7 +83,7 @@
                 {%endif%}
                 {% if item.status == "Complete" %}
                     <td><button type="button" class="btn btn-outline-success btn-sm state" data-source="{{item.id}}">{{item.status}}</button></td>
-                {%endif%}
+                {%endif%} -->
                 
                 <td><button type="button" class="btn btn-outline-info btn-sm" data-bs-toggle="modal" data-bs-target="#task-modal" data-source="{{item.id}}" data-content="{{item.task}}"><i class="fa fa-pen fa-1" aria-hidden="true"></i></button></td>
 
@@ -95,11 +95,9 @@
     </table>
     </div>
 
-
-
     <footer class="footer">
       <div class="container">
-            <p class="text-muted"><small>App developed for CS411 UIUC by @tcheng10</small></p>
+            <p class="text-muted"><small>Derived from app developed for CS411 UIUC by @tcheng10</small></p>
       </div>
     </footer>
   </body>

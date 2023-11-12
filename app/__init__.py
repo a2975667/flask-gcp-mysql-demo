@@ -1,49 +1,41 @@
-"""Setup at app startup"""
 import os
-import sqlalchemy
+import sys
+import mysql.connector
 from flask import Flask
-from yaml import load, Loader
 
+def init_db_connector():
+    database = os.environ.get('MYSQL_DB')
+    config = {
+        'user' : os.environ.get('MYSQL_USER'),
+        'password': os.environ.get('MYSQL_PASSWORD'),
+        # 'database': os.environ.get('MYSQL_DB'),
+        'host': os.environ.get('MYSQL_HOST'),
+        'raise_on_warnings': True
+    }
+    try:
+        cnx = mysql.connector.connect(**config)
+        cursor = cnx.cursor()
+        cursor.execute("CREATE DATABASE IF NOT EXISTS {}".format(database))
+        cursor.execute("USE {}".format(database))
+        cursor.execute("""
+              CREATE TABLE tasks (
+                    id int NOT NULL AUTO_INCREMENT,
+                    task varchar(255) NOT NULL,
+                    status char(30),
+                    PRIMARY KEY (id));
+                """)
 
+        cnx.close()
+    except Exception as e:
+        print(e)
+        
+    config['database'] = database
+    cnx = mysql.connector.connect(**config)
+    return cnx
 
-def init_connection_engine():
-    """ initialize database setup
-    Takes in os variables from environment if on GCP
-    Reads in local variables that will be ignored in public repository.
-    Returns:
-        pool -- a connection to GCP MySQL
-    """
-
-
-    # detect env local or gcp
-    if os.environ.get('GAE_ENV') != 'standard':
-        try:
-            variables = load(open("app.yaml"), Loader=Loader)
-        except OSError as e:
-            print("Make sure you have the app.yaml file setup")
-            os.exit()
-
-        env_variables = variables['env_variables']
-        for var in env_variables:
-            os.environ[var] = env_variables[var]
-
-    pool = sqlalchemy.create_engine(
-        sqlalchemy.engine.url.URL(
-            drivername="mysql+pymysql",
-            username=os.environ.get('MYSQL_USER'),
-            password=os.environ.get('MYSQL_PASSWORD'),
-            database=os.environ.get('MYSQL_DB'),
-            host=os.environ.get('MYSQL_HOST')
-        )
-    )
-
-    return pool
-
+db = init_db_connector()
 
 app = Flask(__name__)
-db = init_connection_engine()
-
-# To prevent from using a blueprint, we use a cyclic import
-# This also means that we need to place this import here
-# pylint: disable=cyclic-import, wrong-import-position
 from app import routes
+
+
