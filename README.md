@@ -4,9 +4,8 @@ Spinoff of todolist application available at https://github.com/a2975667/flask-g
 ## Requirements
 
 ```
-python >= 3.5
-podman 
-mysql client
+python
+podman/docker/... 
 ```
 
 ## Getting started
@@ -19,13 +18,13 @@ cd flask-mysql-todolist
 
 ## Run mysql server (as a local container) 
 ```bash
-podman run -d -p 3306:3306 -v $(pwd):/data -e MYSQL_ROOT_PASSWORD=<your-choice-of-password> --name mysql mysql
+podman run -d -p 3306:3306 -e MYSQL_ROOT_PASSWORD=<your-choice-of-password> --name mysql mysql
 ```
 
-## Create and initialize database
+<!-- ## Create and initialize database
 ```bash
 mysql -uroot -ppassw0rd --host=localhost < init.sql
-```
+``` -->
 
 ## Run the application (locally)
 
